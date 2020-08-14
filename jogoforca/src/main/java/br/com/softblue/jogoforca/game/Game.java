@@ -15,6 +15,7 @@ public class Game {
 		UI.print("Bem vindo ao jogo da forca!");
 
 		Dictionary dicionary = Dictionary.getInstance();
+		UI.print("Dicionário utilizado: " + dicionary.getName());
 		Word word = dicionary.nextWord();
 
 		UI.print("A palavra tem " + word.size() + " letras");

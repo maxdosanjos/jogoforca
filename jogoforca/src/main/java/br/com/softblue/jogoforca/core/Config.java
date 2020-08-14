@@ -6,6 +6,7 @@ import java.util.Properties;
 public class Config {
 	private static Properties props = new Properties();
 	public static final String MAX_ERRORS = "maxErrors";
+	public static final String DICTIONARY_CLASS_NAME = "dicionaryClassName";
 
 	static {
 		try {
@@ -14,11 +15,11 @@ public class Config {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static String get(String nome) {
 		return Config.props.getProperty(nome);
 	}
-	
+
 	public static void setMaxErrors(String maxErrors) {
 		Config.props.setProperty(Config.MAX_ERRORS, maxErrors);
 	}

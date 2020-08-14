@@ -1,45 +1,27 @@
 package br.com.softblue.jogoforca.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.lang.reflect.Constructor;
 
-import br.com.softblue.jogoforca.utils.RandomUtils;
-
-public class Dictionary {
-
-	private static final String FILE_NAME = "dicionario.txt";
-	private List<String> words = new ArrayList<>();
+public abstract class Dictionary {
 	private static Dictionary instance;
 
-	private Dictionary() {
-		load();
-	}
-
 	public static Dictionary getInstance() {
-		if(Dictionary.instance == null) {
-			Dictionary.instance = new Dictionary();
+		if (Dictionary.instance == null) {
+			String className = Config.get(Config.DICTIONARY_CLASS_NAME);
+
+			try {
+				Class<?> clazz = Class.forName(className);
+				Constructor<?> constructor = clazz.getConstructor();
+
+				Dictionary.instance = (Dictionary) constructor.newInstance();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return Dictionary.instance;
 	}
 
-	private void load() {
-		try (Scanner scanner = new Scanner(getClass().getResourceAsStream("/" + FILE_NAME))) {
-			while (scanner.hasNextLine()) {
-				String word = scanner.nextLine().trim();
+	public abstract Word nextWord();
 
-				words.add(word);
-			}
-		}
-
-		if (words.size() == 0) {
-			throw new GameException("A lista de palavras não pode ser vazia");
-		}
-
-	}
-
-	public Word nextWord() {
-		int pos = RandomUtils.newRandomNumber(0, this.words.size());
-		return new Word(this.words.get(pos));
-	}
+	public abstract String getName();
 }
